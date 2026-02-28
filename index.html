@@ -1,0 +1,2491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoSentinel – Madurai | Environmental Intelligence System</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+    <style>
+        /* Consolidated CSS - All styles merged from style.css, dashboard.css, login.css, public.css, chart.css, additional.css */
+        :root {
+            --primary-color: #2ecc71;
+            --secondary-color: #27ae60;
+            --accent-color: #3498db;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--dark-color);
+        }
+
+        .nav-auth {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* Buttons */
+        .btn-login, .btn-primary, .btn-secondary, .btn-logout, .btn-warning, .btn-emergency, .btn-calculate, .btn-show-users, .btn-login-submit, .btn-submit, .btn-assign, .btn-sale {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-login {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .btn-login:hover {
+            background: var(--dark-color);
+            color: white;
+        }
+
+        .btn-primary, .btn-login-submit, .btn-submit {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover, .btn-login-submit:hover, .btn-submit:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .btn-logout {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid white;
+            border-radius: 20px;
+        }
+
+        .btn-logout:hover {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+
+        .btn-emergency {
+            padding: 1rem 2rem;
+            background: var(--danger-color);
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .btn-emergency:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+
+        .btn-calculate {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-show-users {
+            width: 100%;
+            padding: 0.75rem;
+            background: #3498db;
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .btn-show-users:hover {
+            background: #2980b9;
+        }
+
+        .btn-assign, .btn-sale {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 5px;
+        }
+
+        .btn-assign:hover, .btn-sale:hover {
+            background: var(--secondary-color);
+        }
+
+        .btn-sale.disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        /* Dashboard Layout */
+        .dashboard, .public-main {
+            padding: 6rem 2rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2rem;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-header p {
+            color: #666;
+        }
+
+        .dashboard-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .dashboard-section h2 {
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .stats-grid .stat-icon {
+            font-size: 2.5rem;
+        }
+
+        .stats-grid .stat-info h3 {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+
+        .stats-grid .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+
+        .stats-grid .stat-status {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 10px;
+        }
+
+        .stats-grid .stat-status.good, .stats-grid .stat-status.low {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .stats-grid .stat-status.high {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .upload-area, .image-upload, .photo-area {
+            flex: 1;
+            min-width: 300px;
+            border: 2px dashed var(--primary-color);
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: #f8f9fa;
+        }
+
+        .upload-area:hover, .image-upload:hover, .photo-area:hover {
+            background: #e8f5e9;
+        }
+
+        .upload-icon, .photo-icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .analysis-result {
+            width: 100%;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .result-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .result-item .label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .result-item .value {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        /* Prediction Grid */
+        .prediction-grid, .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .prediction-card, .analytics-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .forecast-chart {
+            height: 200px;
+        }
+
+        .chart-bars, .simple-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 100%;
+            padding: 1rem 0;
+        }
+
+        .chart-bars .bar, .simple-chart .bar {
+            width: 40px;
+            background: linear-gradient(to top, var(--primary-color), var(--secondary-color));
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .simple-chart .bar {
+            width: 30px;
+        }
+
+        .chart-bars .bar span {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .prediction-stat {
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .big-number {
+            display: block;
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--warning-color);
+        }
+
+        .risk-zones {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #ddd;
+        }
+
+        .risk-zones h4 {
+            color: var(--danger-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .risk-zones ul {
+            list-style: disc;
+            padding-left: 1.5rem;
+        }
+
+        /* Employee Management */
+        .employee-controls, .waste-filters, .complaint-filters, .chart-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .employee-controls input, .employee-controls select, .waste-filters select, .complaint-filters select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .employee-controls input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .employee-table {
+            overflow-x: auto;
+        }
+
+        .employee-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .employee-table th, .employee-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .employee-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .employee-table .status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .employee-table .status.online {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .employee-table .status.offline {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .ai-suggestion {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        /* Complaint List */
+        .complaint-list, .task-list, .request-list, .waste-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .complaint-card, .task-card, .request-card, .waste-card {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .complaint-card:hover, .task-card:hover, .waste-card:hover {
+            box-shadow: var(--shadow);
+        }
+
+        .complaint-header, .task-header, .request-header, .waste-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .complaint-id, .task-id, .request-id {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .complaint-type {
+            background: #e3f2fd;
+            color: var(--accent-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+        }
+
+        .task-priority {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .task-priority.high, .request-status.rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .task-priority.medium, .request-status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .task-priority.low, .request-status.approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .task-actions, .waste-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .request-section {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #fff3e0;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        /* Photo Upload */
+        .photo-upload-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .photo-upload-card {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        /* Report Form */
+        .report-form, .complaint-form {
+            display: grid;
+            gap: 1rem;
+            max-width: 600px;
+        }
+
+        .report-form .form-group, .complaint-form .form-group, .login-form .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .report-form input, .report-form select, .report-form textarea,
+        .complaint-form input, .complaint-form select, .complaint-form textarea,
+        .login-form input, .login-form select {
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .report-form input:focus, .report-form select:focus, .report-form textarea:focus,
+        .complaint-form input:focus, .complaint-form select:focus, .complaint-form textarea:focus,
+        .login-form input:focus, .login-form select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        /* Inventory Grid */
+        .inventory-grid, .awareness-grid, .startup-grid, .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .inventory-card, .awareness-card, .startup-card, .product-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .inventory-card:hover, .awareness-card:hover, .startup-card:hover, .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .inventory-icon, .startup-icon, .awareness-icon, .product-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .inventory-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+
+        /* Business Chart Section */
+        .business-chart-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .business-chart-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .chart-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .chart-display canvas {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            background: #fafafa;
+        }
+
+        .waste-selector, .quantity-input {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .waste-selector select, .quantity-input input[type="range"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .roi-calculator {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            color: white;
+        }
+
+        .calculator-inputs {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .calc-input {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .calc-input input {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .roi-result {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .roi-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .roi-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            padding-top: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-stats .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+        }
+
+        .hero-stats .stat-number {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .visualization-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Login Page */
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 2rem;
+        }
+
+        .login-container {
+            display: flex;
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-box {
+            flex: 1;
+            padding: 3rem;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-info {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 3rem;
+            color: white;
+        }
+
+        .demo-list {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .demo-list button {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .demo-list button:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .all-users-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .users-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+        }
+
+        .users-table th, .users-table td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .users-table th {
+            background: #f5f5f5;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        /* Ward Map */
+        .ward-map {
+            padding: 4rem 2rem;
+            background: white;
+        }
+
+        .ward-legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .legend-item.low, .ward-item.low { background: #d4edda; color: #155724; }
+        .legend-item.medium, .ward-item.medium { background: #fff3cd; color: #856404; }
+        .legend-item.high, .ward-item.high { background: #f8d7da; color: #721c24; }
+
+        .ward-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+        }
+
+        .ward-item {
+            padding: 1rem;
+            text-align: center;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .ward-item:hover {
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 3rem 2rem 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Emergency Section */
+        .emergency-section {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-left: 4px solid var(--danger-color);
+        }
+
+        /* Language Toggle */
+        .language-toggle {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--primary-color);
+            background: white;
+            color: var(--primary-color);
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .lang-btn.active, .lang-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Pollution Types */
+        .pollution-types {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .type-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .type-option input[type="radio"] {
+            display: none;
+        }
+
+        .type-option:has(input:checked) {
+            border-color: var(--primary-color);
+            background: #e8f5e9;
+        }
+
+        .type-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Success Message */
+        .success-message {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .ward-grid { grid-template-columns: repeat(3, 1fr); }
+            .login-container { flex-direction: column; }
+            .photo-upload-grid { grid-template-columns: 1fr; }
+            .pollution-types { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation will be dynamically loaded based on page -->
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-icon">🌍</span>
+            <span class="logo-text">EcoSentinel – Madurai</span>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="nav-auth" id="navAuth">
+            <button class="btn-login" onclick="window.location.href='#login'">Login</button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container - Will be loaded dynamically -->
+    <div id="app"></div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>EcoSentinel – Madurai</h4>
+                <p>AI-Powered Environmental Intelligence & Circular Economy Platform for Madurai Smart City Transformation.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#public">Report Issue</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Data Sources</h4>
+                <ul>
+                    <li>ISRO Satellite Data</li>
+                    <li>Madurai Municipal Corp</li>
+                    <li>TNPCB Reports</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>Email: info@ecosentinel-madurai.in</p>
+                <p>Phone: +91 452 0000000</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 EcoSentinel – Madurai - Environmental Intelligence System</p>
+        </div>
+    </footer>
+
+    <!-- Consolidated JavaScript -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <script>
+        // Consolidated JavaScript - All JS merged from main.js, login.js, admin.js, employee.js, corporate.js, public.js, chart.js, three-visualization.js
+        
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "madurai-environmental.firebaseapp.com",
+            projectId: "madurai-environmental",
+            storageBucket: "madurai-environmental.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef"
+        };
+
+        // Initialize Firebase
+        let auth, db, storage;
+
+        // API Base URL
+        const API_BASE_URL = 'http://localhost:8000';
+
+        // Product data for different waste types
+        const productData = {
+            plastic: [
+                { name: "HDPE Pellets", icon: "♻️", revenue: "₹45/kg", market: "High demand" },
+                { name: "PET Flakes", icon: "🔄", revenue: "₹35/kg", market: "Moderate" },
+                { name: "Plastic Furniture", icon: "🪑", revenue: "₹500/piece", market: "Growing" }
+            ],
+            organic: [
+                { name: "Compost Fertilizer", icon: "🌱", revenue: "₹15/kg", market: "High demand" },
+                { name: "Bio-gas", icon: "🔥", revenue: "₹30/m³", market: "Emerging" },
+                { name: "Vermicompost", icon: "🪱", revenue: "₹25/kg", market: "Growing" }
+            ],
+            industrial: [
+                { name: "Steel Scrap", icon: "🔩", revenue: "₹40/kg", market: "High demand" },
+                { name: "Aluminum Ingots", icon: "⚙️", revenue: "₹180/kg", market: "Steady" },
+                { name: "Copper Wire", icon: "〰️", revenue: "₹450/kg", market: "High" }
+            ]
+        };
+
+        // DOM Content Loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Firebase if available
+            if (typeof firebase !== 'undefined') {
+                firebase.initializeApp(firebaseConfig);
+                auth = firebase.auth();
+                db = firebase.firestore();
+                storage = firebase.storage();
+            }
+            
+            // Initialize components based on current page
+            initializePage();
+        });
+
+        // Initialize page based on URL hash
+        function initializePage() {
+            const hash = window.location.hash || '#home';
+            
+            // Load appropriate page content
+            loadPage(hash);
+            
+            // Initialize common components
+            initWardGrid();
+            updateStats();
+            checkUserAuth();
+            initThreeJS();
+        }
+
+        // Load page content
+        function loadPage(hash) {
+            const app = document.getElementById('app');
+            
+            switch(hash) {
+                case '#home':
+                    loadHomePage(app);
+                    break;
+                case '#login':
+                    loadLoginPage(app);
+                    break;
+                case '#admin':
+                    loadAdminPage(app);
+                    break;
+                case '#employee':
+                    loadEmployeePage(app);
+                    break;
+                case '#corporate':
+                    loadCorporatePage(app);
+                    break;
+                case '#public':
+                    loadPublicPage(app);
+                    break;
+                default:
+                    loadHomePage(app);
+            }
+        }
+
+        // Home Page
+        function loadHomePage(container) {
+            container.innerHTML = `
+                <section class="hero" id="home">
+                    <div class="hero-content">
+                        <h1>AI-Powered Environmental Intelligence</h1>
+                        <p class="subtitle">Pollution Risk Prediction System for Madurai</p>
+                        <div class="hero-stats">
+                            <div class="stat-card">
+                                <span class="stat-number" id="airIndex">42</span>
+                                <span class="stat-label">AQI</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-number" id="waterRisk">28%</span>
+                                <span class="stat-label">Water Risk</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-number" id="cleanIndex">76</span>
+                                <span class="stat-label">Cleanliness Index</span>
+                            </div>
+                        </div>
+                        <div class="hero-buttons">
+                            <button class="btn-primary" onclick="window.location.hash='#public'">Report Issue</button>
+                            <button class="btn-secondary" onclick="window.location.hash='#login'">Dashboard Login</button>
+                        </div>
+                    </div>
+                    <div class="visualization-container" id="cityVisualization"></div>
+                </section>
+
+                <section class="summary-panel">
+                    <h2>Live Pollution Summary</h2>
+                    <div class="summary-grid">
+                        <div class="summary-card air">
+                            <div class="card-icon">💨</div>
+                            <h3>Air Quality</h3>
+                            <div class="progress-bar"><div class="progress" id="airProgress" style="width: 42%"></div></div>
+                            <span class="status">Moderate</span>
+                        </div>
+                        <div class="summary-card water">
+                            <div class="card-icon">💧</div>
+                            <h3>Water Quality</h3>
+                            <div class="progress-bar"><div class="progress" id="waterProgress" style="width: 28%"></div></div>
+                            <span class="status">Good</span>
+                        </div>
+                        <div class="summary-card land">
+                            <div class="card-icon">🗑️</div>
+                            <h3>Land Waste</h3>
+                            <div class="progress-bar"><div class="progress" id="landProgress" style="width: 65%"></div></div>
+                            <span class="status">High Risk</span>
+                        </div>
+                        <div class="summary-card drainage">
+                            <div class="card-icon">🌊</div>
+                            <h3>Drainage</h3>
+                            <div class="progress-bar"><div class="progress" id="drainageProgress" style="width: 45%"></div></div>
+                            <span class="status">Moderate</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="startup-preview">
+                    <h2>AI Startup Suggestions</h2>
+                    <p class="section-desc">Based on current waste data analysis</p>
+                    <div class="startup-grid">
+                        <div class="startup-card">
+                            <div class="startup-icon">♻️</div>
+                            <h3>Plastic Recycling Unit</h3>
+                            <p>High plastic waste detected in Zone 4. Consider establishing a community recycling cooperative.</p>
+                            <div class="startup-stats">
+                                <span>Potential: 500kg/day</span>
+                                <span>Investment: ₹2L</span>
+                            </div>
+                        </div>
+                        <div class="startup-card">
+                            <div class="startup-icon">🌱</div>
+                            <h3>Organic Compost Plant</h3>
+                            <p>Organic waste accumulation in market areas. Perfect for organic fertilizer production.</p>
+                            <div class="startup-stats">
+                                <span>Potential: 800kg/day</span>
+                                <span>Investment: ₹3L</span>
+                            </div>
+                        </div>
+                        <div class="startup-card">
+                            <div class="startup-icon">🔋</div>
+                            <h3>Waste to Energy</h3>
+                            <p>High waste density in industrial zones. Bio-mass conversion opportunity.</p>
+                            <div class="startup-stats">
+                                <span>Potential: 1MW</span>
+                                <span>Investment: ₹50L</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="business-chart-section">
+                    <h2>♻️ Waste-to-Product AI Analysis</h2>
+                    <p class="section-desc">Interactive chart for entrepreneurs to identify business opportunities from waste data</p>
+                    <div class="business-chart-container">
+                        <div class="chart-controls">
+                            <div class="waste-selector">
+                                <label for="wasteTypeSelect">Select Waste Type:</label>
+                                <select id="wasteTypeSelect" onchange="updateBusinessChart()">
+                                    <option value="plastic">Plastic Waste</option>
+                                    <option value="organic">Organic Waste</option>
+                                    <option value="industrial">Industrial Metal</option>
+                                </select>
+                            </div>
+                            <div class="quantity-input">
+                                <label for="quantitySlider">Available Quantity (kg/month):</label>
+                                <input type="range" id="quantitySlider" min="100" max="10000" value="1000" oninput="updateQuantityDisplay()">
+                                <span id="quantityDisplay">1,000 kg</span>
+                            </div>
+                        </div>
+                        <div class="chart-display">
+                            <canvas id="businessChart" width="600" height="350"></canvas>
+                        </div>
+                        <div class="product-suggestions">
+                            <h3>📦 Recommended Products from Your Waste</h3>
+                            <div class="products-grid" id="productsGrid"></div>
+                        </div>
+                        <div class="roi-calculator">
+                            <h3>💰 ROI Calculator</h3>
+                            <div class="calculator-inputs">
+                                <div class="calc-input">
+                                    <label for="investmentInput">Investment (₹):</label>
+                                    <input type="number" id="investmentInput" value="200000">
+                                </div>
+                                <button class="btn-calculate" onclick="calculateROI()">Calculate</button>
+                            </div>
+                            <div class="roi-result" id="roiResult"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="ward-map">
+                    <h2>Ward-wise Risk Classification</h2>
+                    <div class="map-container">
+                        <div class="ward-legend">
+                            <span class="legend-item low">Low Risk</span>
+                            <span class="legend-item medium">Medium Risk</span>
+                            <span class="legend-item high">High Risk</span>
+                        </div>
+                        <div class="ward-grid" id="wardGrid"></div>
+                    </div>
+                </section>
+            `;
+            
+            // Initialize business chart
+            setTimeout(() => {
+                initBusinessChart();
+                updateProductsGrid('plastic');
+                calculateROI();
+            }, 100);
+        }
+
+        // Login Page
+        function loadLoginPage(container) {
+            container.innerHTML = `
+                <div class="login-page">
+                    <div class="login-container">
+                        <div class="login-box">
+                            <div class="login-header">
+                                <span class="logo-icon">🌍</span>
+                                <h1>EcoSentinel – Madurai</h1>
+                                <p>Environmental Intelligence System</p>
+                            </div>
+                            
+                            <form id="loginForm" class="login-form">
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="role">User Role</label>
+                                    <select id="role" name="role" required>
+                                        <option value="">Select your role</option>
+                                        <option value="municipal_admin">Municipal Admin</option>
+                                        <option value="cleaning_employee">Cleaning Employee</option>
+                                        <option value="corporate_company">Corporate Company</option>
+                                        <option value="public_user">Public User</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn-login-submit">Login</button>
+                            </form>
+                            
+                            <div class="demo-accounts">
+                                <h3>Demo Accounts</h3>
+                                <div class="demo-list">
+                                    <button onclick="fillDemo('admin@madurai.gov.in', 'admin123', 'municipal_admin')">Admin</button>
+                                    <button onclick="fillDemo('employee@madurai.gov.in', 'employee123', 'cleaning_employee')">Employee</button>
+                                    <button onclick="fillDemo('corp@company.com', 'corp123', 'corporate_company')">Corporate</button>
+                                    <button onclick="fillDemo('user@email.com', 'user123', 'public_user')">Public</button>
+                                </div>
+                            </div>
+                            
+                            <div class="all-users-section">
+                                <h3>All Registered Users</h3>
+                                <button class="btn-show-users" onclick="fetchAndDisplayUsers()">Show All Users</button>
+                                <div id="usersList" class="users-list"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="login-info">
+                            <a href="#" onclick="window.location.hash='#home'" class="home-link">← Back to Home</a>
+                            <h2>Welcome to EcoSentinel – Madurai</h2>
+                            <p>AI-Powered Environmental Intelligence & Pollution Risk Prediction System for Madurai</p>
+                            <ul class="features-list">
+                                <li>🏛️ Municipal Admin Dashboard</li>
+                                <li>🧹 Employee Task Management</li>
+                                <li>🏭 Corporate Waste Procurement</li>
+                                <li>👥 Public Complaint Portal</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add login form handler
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+        }
+
+        // Admin Dashboard
+        function loadAdminPage(container) {
+            container.innerHTML = `
+                <main class="dashboard">
+                    <div class="dashboard-header">
+                        <h1>Municipal Admin Dashboard</h1>
+                        <p>Welcome back! Here's the environmental status of Madurai.</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">💨</div>
+                            <div class="stat-info">
+                                <h3>Air Quality Index</h3>
+                                <span class="stat-value" id="airQuality">42</span>
+                                <span class="stat-status good">Good</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💧</div>
+                            <div class="stat-info">
+                                <h3>Water Risk</h3>
+                                <span class="stat-value" id="waterRisk">28%</span>
+                                <span class="stat-status low">Low</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🗑️</div>
+                            <div class="stat-info">
+                                <h3>Waste Density</h3>
+                                <span class="stat-value" id="wasteDensity">65%</span>
+                                <span class="stat-status high">High</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">👷</div>
+                            <div class="stat-info">
+                                <h3>Active Employees</h3>
+                                <span class="stat-value" id="activeEmployees">24</span>
+                                <span class="stat-status">Online</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <section class="dashboard-section" id="satellite">
+                        <h2>Satellite Image Analysis</h2>
+                        <div class="upload-section">
+                            <div class="upload-area" id="uploadArea">
+                                <span class="upload-icon">📸</span>
+                                <p>Click or drag satellite image here</p>
+                                <input type="file" id="satelliteInput" accept="image/*" hidden>
+                            </div>
+                            <button class="btn-primary" onclick="uploadSatelliteImage()">Analyze Image</button>
+                        </div>
+                        <div class="analysis-result" id="analysisResult" style="display: none;">
+                            <h3>Analysis Result</h3>
+                            <div class="result-grid">
+                                <div class="result-item">
+                                    <span class="label">Cleanliness Score:</span>
+                                    <span class="value" id="cleanlinessScore">--</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="label">Risk Level:</span>
+                                    <span class="value" id="riskLevel">--</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="label">Waste Type:</span>
+                                    <span class="value" id="wasteType">--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="dashboard-section" id="employees">
+                        <h2>Employee Management</h2>
+                        <div class="employee-controls">
+                            <input type="text" placeholder="Search employees..." id="employeeSearch">
+                            <select id="wardFilter">
+                                <option value="">All Wards</option>
+                                <option value="1">Ward 1</option>
+                                <option value="2">Ward 2</option>
+                                <option value="3">Ward 3</option>
+                            </select>
+                            <button class="btn-primary" onclick="assignTask()">Assign Task</button>
+                        </div>
+                        <div class="employee-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Ward</th>
+                                        <th>Status</th>
+                                        <th>Tasks</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="employeeTableBody">
+                                    <tr><td>Ramesh Kumar</td><td>Ward 3</td><td><span class="status online">Online</span></td><td>3 Active</td><td><button>View</button></td></tr>
+                                    <tr><td>Priya Devi</td><td>Ward 6</td><td><span class="status online">Online</span></td><td>2 Active</td><td><button>View</button></td></tr>
+                                    <tr><td>Mohammed Ali</td><td>Ward 10</td><td><span class="status offline">Offline</span></td><td>1 Active</td><td><button>View</button></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="ai-suggestion">
+                            <h3>🤖 AI Workforce Suggestion</h3>
+                            <p>Waste density is <strong>HIGH</strong> in Wards 3, 6, and 10. Consider deploying <strong>5 additional workers</strong> to these areas.</p>
+                        </div>
+                    </section>
+
+                    <section class="dashboard-section" id="inventory">
+                        <h2>Waste Inventory</h2>
+                        <div class="inventory-grid">
+                            <div class="inventory-card">
+                                <div class="inventory-icon">♻️</div>
+                                <h3>Plastic Waste</h3>
+                                <span class="inventory-value">2,450 kg</span>
+                                <span class="inventory-location">Wards 4, 7, 9</span>
+                                <button class="btn-sale">Available for Sale</button>
+                            </div>
+                            <div class="inventory-card">
+                                <div class="inventory-icon">🌱</div>
+                                <h3>Organic Waste</h3>
+                                <span class="inventory-value">5,120 kg</span>
+                                <span class="inventory-location">Wards 1, 2, 5</span>
+                                <button class="btn-sale">Available for Sale</button>
+                            </div>
+                            <div class="inventory-card">
+                                <div class="inventory-icon">🏭</div>
+                                <h3>Industrial Waste</h3>
+                                <span class="inventory-value">1,890 kg</span>
+                                <span class="inventory-location">Ward 8</span>
+                                <button class="btn-sale">Available for Sale</button>
+                            </div>
+                            <div class="inventory-card">
+                                <div class="inventory-icon">🧪</div>
+                                <h3>Hazardous Waste</h3>
+                                <span class="inventory-value">340 kg</span>
+                                <span class="inventory-location">Ward 10</span>
+                                <button class="btn-sale disabled">Restricted</button>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            `;
+            
+            // Initialize admin functions
+            setTimeout(() => {
+                document.getElementById('uploadArea')?.addEventListener('click', () => {
+                    document.getElementById('satelliteInput').click();
+                });
+                
+                document.getElementById('satelliteInput')?.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const uploadArea = document.getElementById('uploadArea');
+                        uploadArea.innerHTML = `<span class="upload-icon">✅</span><p>${file.name}</p>`;
+                    }
+                });
+                
+                document.getElementById('employeeSearch')?.addEventListener('input', function(e) {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const rows = document.querySelectorAll('#employeeTableBody tr');
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        row.style.display = text.includes(searchTerm) ? '' : 'none';
+                    });
+                });
+            }, 100);
+        }
+
+        // Employee Dashboard
+        function loadEmployeePage(container) {
+            container.innerHTML = `
+                <main class="dashboard">
+                    <div class="dashboard-header">
+                        <h1>Cleaning Employee Dashboard</h1>
+                        <p>View your assigned tasks and submit daily reports.</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">📋</div>
+                            <div class="stat-info">
+                                <h3>Assigned Tasks</h3>
+                                <span class="stat-value" id="assignedTasks">3</span>
+                                <span class="stat-status">Pending</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">✅</div>
+                            <div class="stat-info">
+                                <h3>Completed Today</h3>
+                                <span class="stat-value" id="completedTasks">1</span>
+                                <span class="stat-status good">Done</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⚠️</div>
+                            <div class="stat-info">
+                                <h3>Area Risk Level</h3>
+                                <span class="stat-value" id="areaRisk">High</span>
+                                <span class="stat-status high">Attention</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <section class="dashboard-section" id="tasks">
+                        <h2>Assigned Tasks</h2>
+                        <div class="task-list" id="taskList">
+                            <div class="task-card">
+                                <div class="task-header">
+                                    <span class="task-id">#TSK-001</span>
+                                    <span class="task-priority high">High Priority</span>
+                                </div>
+                                <h3>Clear garbage accumulation</h3>
+                                <p class="task-location">📍 Ward 3, Anna Nagar Main Road</p>
+                                <p class="task-desc">Large garbage pile reported near the market area.</p>
+                                <div class="task-actions">
+                                    <button class="btn-primary" onclick="openTaskDetail('TSK-001')">View</button>
+                                    <button class="btn-secondary" onclick="markComplete('TSK-001')">Complete</button>
+                                </div>
+                            </div>
+                            <div class="task-card">
+                                <div class="task-header">
+                                    <span class="task-id">#TSK-002</span>
+                                    <span class="task-priority medium">Medium Priority</span>
+                                </div>
+                                <h3>Drainage cleaning</h3>
+                                <p class="task-location">📍 Ward 6, Tallakulam</p>
+                                <p class="task-desc">Clear debris from drainage near the temple.</p>
+                                <div class="task-actions">
+                                    <button class="btn-primary" onclick="openTaskDetail('TSK-002')">View</button>
+                                    <button class="btn-secondary" onclick="markComplete('TSK-002')">Complete</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="request-section">
+                            <button class="btn-warning" onclick="requestAdditionalMembers()">
+                                🚨 Request Additional Members
+                            </button>
+                        </div>
+                    </section>
+
+                    <section class="dashboard-section" id="photos">
+                        <h2>Upload Before/After Photos</h2>
+                        <div class="photo-upload-grid">
+                            <div class="photo-upload-card">
+                                <h3>Before Photo</h3>
+                                <div class="photo-area" id="beforePhotoArea" onclick="document.getElementById('beforePhoto').click()">
+                                    <span class="photo-icon">📷</span>
+                                    <p>Click to upload</p>
+                                    <input type="file" id="beforePhoto" accept="image/*" hidden>
+                                </div>
+                            </div>
+                            <div class="photo-upload-card">
+                                <h3>After Photo</h3>
+                                <div class="photo-area" id="afterPhotoArea" onclick="document.getElementById('afterPhoto').click()">
+                                    <span class="photo-icon">📷</span>
+                                    <p>Click to upload</p>
+                                    <input type="file" id="afterPhoto" accept="image/*" hidden>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn-primary" onclick="submitPhotos()">Submit Photos</button>
+                    </section>
+
+                    <section class="dashboard-section" id="reports">
+                        <h2>Submit Daily Report</h2>
+                        <form class="report-form" id="reportForm">
+                            <div class="form-group">
+                                <label for="reportDate">Date</label>
+                                <input type="date" id="reportDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ward">Ward</label>
+                                <select id="reportWard" required>
+                                    <option value="">Select Ward</option>
+                                    <option value="1">Ward 1</option>
+                                    <option value="2">Ward 2</option>
+                                    <option value="3">Ward 3</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tasksCompleted">Tasks Completed</label>
+                                <input type="number" id="tasksCompleted" min="0" value="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="wasteCollected">Waste Collected (kg)</label>
+                                <input type="number" id="wasteCollected" min="0" value="0" required>
+                            </div>
+                            <button type="submit" class="btn-primary">Submit Report</button>
+                        </form>
+                    </section>
+
+                    <section class="dashboard-section emergency-section">
+                        <h2>🚨 Emergency Escalation</h2>
+                        <button class="btn-emergency" onclick="triggerEmergency()">
+                            ⚡ Trigger Emergency Alert
+                        </button>
+                    </section>
+                </main>
+            `;
+            
+            // Initialize employee functions
+            setTimeout(() => {
+                document.getElementById('reportDate').valueAsDate = new Date();
+                
+                document.getElementById('beforePhoto').addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        document.getElementById('beforePhotoArea').innerHTML = 
+                            `<span class="photo-icon">✅</span><p>${file.name}</p>`;
+                    }
+                });
+                
+                document.getElementById('afterPhoto').addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        document.getElementById('afterPhotoArea').innerHTML = 
+                            `<span class="photo-icon">✅</span><p>${file.name}</p>`;
+                    }
+                });
+                
+                document.getElementById('reportForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    showNotification('Daily report submitted successfully!', 'success');
+                    e.target.reset();
+                    document.getElementById('reportDate').valueAsDate = new Date();
+                });
+            }, 100);
+        }
+
+        // Corporate Dashboard
+        function loadCorporatePage(container) {
+            container.innerHTML = `
+                <main class="dashboard">
+                    <div class="dashboard-header">
+                        <h1>Corporate Company Dashboard</h1>
+                        <p>Browse available waste materials for procurement.</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">♻️</div>
+                            <div class="stat-info">
+                                <h3>Plastic Available</h3>
+                                <span class="stat-value">2,450 kg</span>
+                                <span class="stat-status">Ready</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🌱</div>
+                            <div class="stat-info">
+                                <h3>Organic Available</h3>
+                                <span class="stat-value">5,120 kg</span>
+                                <span class="stat-status">Ready</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🏭</div>
+                            <div class="stat-info">
+                                <h3>Industrial</h3>
+                                <span class="stat-value">1,890 kg</span>
+                                <span class="stat-status">Available</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <section class="dashboard-section" id="waste">
+                        <h2>Available Waste Materials</h2>
+                        <div class="waste-filters">
+                            <select id="wasteTypeFilter">
+                                <option value="">All Types</option>
+                                <option value="plastic">Plastic</option>
+                                <option value="organic">Organic</option>
+                                <option value="industrial">Industrial</option>
+                            </select>
+                            <select id="wardFilter">
+                                <option value="">All Wards</option>
+                                <option value="1">Ward 1</option>
+                                <option value="2">Ward 2</option>
+                                <option value="3">Ward 3</option>
+                            </select>
+                        </div>
+                        
+                        <div class="waste-grid" id="wasteGrid">
+                            <div class="waste-card">
+                                <div class="waste-header">
+                                    <span class="waste-type">♻️ Plastic</span>
+                                    <span class="waste-qty">2,450 kg</span>
+                                </div>
+                                <h3>HDPE & PET Plastics</h3>
+                                <p class="waste-location">📍 Wards 4, 7, 9</p>
+                                <div class="waste-actions">
+                                    <button class="btn-primary" onclick="requestProcurement('plastic', 2450)">Request</button>
+                                    <button class="btn-secondary" onclick="contactAdmin('plastic')">Contact</button>
+                                </div>
+                            </div>
+                            <div class="waste-card">
+                                <div class="waste-header">
+                                    <span class="waste-type">🌱 Organic</span>
+                                    <span class="waste-qty">5,120 kg</span>
+                                </div>
+                                <h3>Organic Compost Material</h3>
+                                <p class="waste-location">📍 Wards 1, 2, 5</p>
+                                <div class="waste-actions">
+                                    <button class="btn-primary" onclick="requestProcurement('organic', 5120)">Request</button>
+                                    <button class="btn-secondary" onclick="contactAdmin('organic')">Contact</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            `;
+        }
+
+        // Public Portal
+        function loadPublicPage(container) {
+            container.innerHTML = `
+                <main class="public-main">
+                    <div class="language-toggle">
+                        <button class="lang-btn active" data-lang="en">English</button>
+                        <button class="lang-btn" data-lang="ta">தமிழ்</button>
+                    </div>
+
+                    <section class="report-section">
+                        <h1>Report an Issue</h1>
+                        <p class="section-desc">Help keep Madurai clean!</p>
+                        
+                        <form class="complaint-form" id="complaintForm">
+                            <div class="form-group">
+                                <label>Pollution Type</label>
+                                <div class="pollution-types">
+                                    <label class="type-option">
+                                        <input type="radio" name="pollutionType" value="air" required>
+                                        <span class="type-icon">💨</span>
+                                        <span class="type-label">Air Pollution</span>
+                                    </label>
+                                    <label class="type-option">
+                                        <input type="radio" name="pollutionType" value="water">
+                                        <span class="type-icon">💧</span>
+                                        <span class="type-label">Water Pollution</span>
+                                    </label>
+                                    <label class="type-option">
+                                        <input type="radio" name="pollutionType" value="land">
+                                        <span class="type-icon">🗑️</span>
+                                        <span class="type-label">Land Waste</span>
+                                    </label>
+                                    <label class="type-option">
+                                        <input type="radio" name="pollutionType" value="drainage">
+                                        <span class="type-icon">🌊</span>
+                                        <span class="type-label">Drainage Issue</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ward">Ward</label>
+                                <select id="ward" required>
+                                    <option value="">Select Ward</option>
+                                    <option value="1">Ward 1 - South Vadakkudal</option>
+                                    <option value="2">Ward 2 - North Vadakkudal</option>
+                                    <option value="3">Ward 3 - Anna Nagar</option>
+                                    <option value="4">Ward 4 - K. K. Nagar</option>
+                                    <option value="5">Ward 5 - Bibikulam</option>
+                                    <option value="6">Ward 6 - Tallakulam</option>
+                                    <option value="7">Ward 7 - Periyar</option>
+                                    <option value="8">Ward 8 - Ellis Nagar</option>
+                                    <option value="9">Ward 9 - Kamarajar</option>
+                                    <option value="10">Ward 10 - Goripalayam</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="location">Location</label>
+                                <input type="text" id="location" placeholder="e.g., Near Anna Nagar Market" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea id="description" rows="4" placeholder="Describe the issue..." required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Upload Photo (Optional)</label>
+                                <div class="image-upload" id="imageUploadArea" onclick="document.getElementById('complaintImage').click()">
+                                    <span class="upload-icon">📷</span>
+                                    <p>Click to upload photo</p>
+                                    <input type="file" id="complaintImage" accept="image/*" hidden>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-submit">Submit Complaint</button>
+                        </form>
+
+                        <div class="success-message" id="successMessage" style="display: none;">
+                            <span class="success-icon">✅</span>
+                            <h2>Complaint Submitted!</h2>
+                            <p>Complaint ID: <span id="complaintId">#COM-000</span></p>
+                            <button class="btn-secondary" onclick="resetForm()">Submit Another</button>
+                        </div>
+                    </section>
+
+                    <section class="awareness-section" id="awareness">
+                        <h2>Environmental Awareness</h2>
+                        <div class="awareness-grid">
+                            <div class="awareness-card">
+                                <span class="awareness-icon">🌳</span>
+                                <h3>Plant Trees</h3>
+                                <p>Trees absorb CO2 and improve air quality.</p>
+                            </div>
+                            <div class="awareness-card">
+                                <span class="awareness-icon">♻️</span>
+                                <h3>Recycle</h3>
+                                <p>Follow the 3R principle - Reduce, Reuse, Recycle.</p>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            `;
+            
+            // Initialize public functions
+            setTimeout(() => {
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                    });
+                });
+                
+                document.getElementById('complaintImage').addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        document.getElementById('imageUploadArea').innerHTML = 
+                            `<span class="upload-icon">✅</span><p>${file.name}</p>`;
+                    }
+                });
+                
+                document.getElementById('complaintForm').addEventListener('submit', handleComplaintSubmit);
+            }, 100);
+        }
+
+        // Login Handler
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Logging in...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Demo mode - simulate login
+                localStorage.setItem('userRole', role);
+                localStorage.setItem('userEmail', email);
+                localStorage.setItem('isLoggedIn', 'true');
+                
+                // Redirect based on role
+                setTimeout(() => {
+                    redirectBasedOnRole(role);
+                }, 500);
+            } catch (error) {
+                alert('Login failed: ' + error.message);
+                submitBtn.textContent = 'Login';
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Complaint Submit Handler
+        async function handleComplaintSubmit(e) {
+            e.preventDefault();
+            
+            const formData = {
+                pollutionType: document.querySelector('input[name="pollutionType"]:checked').value,
+                ward: document.getElementById('ward').value,
+                location: document.getElementById('location').value,
+                description: document.getElementById('description').value,
+                timestamp: new Date().toISOString()
+            };
+            
+            const complaintId = 'COM-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+            document.getElementById('complaintId').textContent = '#' + complaintId;
+            
+            document.getElementById('complaintForm').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+        }
+
+        // Fill demo credentials
+        function fillDemo(email, password, role) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+            document.getElementById('role').value = role;
+        }
+
+        // Fetch and display users
+        async function fetchAndDisplayUsers() {
+            const usersListDiv = document.getElementById('usersList');
+            
+            try {
+                const response = await fetch('http://localhost:8000/users');
+                const users = await response.json();
+                
+                let html = '<table class="users-table"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Ward</th></tr></thead><tbody>';
+                
+                users.forEach(user => {
+                    const roleDisplay = user.role.replace('_', ' ').toUpperCase();
+                    html += `<tr>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${roleDisplay}</td>
+                        <td>${user.ward}</td>
+                    </tr>`;
+                });
+                
+                html += '</tbody></table>';
+                usersListDiv.innerHTML = html;
+            } catch (error) {
+                usersListDiv.innerHTML = '<p class="error">Failed to load users. Make sure the backend is running.</p>';
+            }
+        }
+
+        // Redirect based on role
+        function redirectBasedOnRole(role) {
+            const rolePages = {
+                'municipal_admin': '#admin',
+                'cleaning_employee': '#employee',
+                'corporate_company': '#corporate',
+                'public_user': '#public'
+            };
+            
+            if (rolePages[role]) {
+                window.location.hash = rolePages[role];
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('isLoggedIn');
+            window.location.hash = '#home';
+        }
+
+        // Initialize Ward Grid
+        function initWardGrid() {
+            const wardGrid = document.getElementById('wardGrid');
+            if (!wardGrid) return;
+            
+            const wards = [
+                { id: 1, name: 'Ward 1', risk: 'low' },
+                { id: 2, name: 'Ward 2', risk: 'medium' },
+                { id: 3, name: 'Ward 3', risk: 'high' },
+                { id: 4, name: 'Ward 4', risk: 'medium' },
+                { id: 5, name: 'Ward 5', risk: 'low' },
+                { id: 6, name: 'Ward 6', risk: 'high' },
+                { id: 7, name: 'Ward 7', risk: 'medium' },
+                { id: 8, name: 'Ward 8', risk: 'low' },
+                { id: 9, name: 'Ward 9', risk: 'medium' },
+                { id: 10, name: 'Ward 10', risk: 'high' }
+            ];
+            
+            wardGrid.innerHTML = '';
+            wards.forEach(ward => {
+                const wardItem = document.createElement('div');
+                wardItem.className = `ward-item ${ward.risk}`;
+                wardItem.textContent = ward.name;
+                wardItem.onclick = () => showWardDetails(ward);
+                wardGrid.appendChild(wardItem);
+            });
+        }
+
+        // Show ward details
+        function showWardDetails(ward) {
+            alert(`${ward.name}\nRisk Level: ${ward.risk.toUpperCase()}\n\nClick to view detailed report.`);
+        }
+
+        // Update statistics
+        function updateStats() {
+            const stats = {
+                airIndex: 42,
+                waterRisk: 28,
+                cleanIndex: 76
+            };
+            
+            const airIndexEl = document.getElementById('airIndex');
+            const waterRiskEl = document.getElementById('waterRisk');
+            const cleanIndexEl = document.getElementById('cleanIndex');
+            
+            if (airIndexEl) airIndexEl.textContent = stats.airIndex;
+            if (waterRiskEl) waterRiskEl.textContent = stats.waterRisk + '%';
+            if (cleanIndexEl) cleanIndexEl.textContent = stats.cleanIndex;
+        }
+
+        // Check user authentication
+        function checkUserAuth() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userRole = localStorage.getItem('userRole');
+            
+            if (isLoggedIn === 'true' && userRole) {
+                document.getElementById('navAuth').innerHTML = `
+                    <span id="userName">${userRole.split('_').join(' ')}</span>
+                    <button class="btn-logout" onclick="logout()">Logout</button>
+                `;
+            }
+        }
+
+        // Business Chart Functions
+        function initBusinessChart() {
+            const canvas = document.getElementById('businessChart');
+            if (!canvas) return;
+            drawChart(canvas.getContext('2d'), 'plastic', 1000);
+        }
+
+        function drawChart(ctx, wasteType, quantity) {
+            const products = productData[wasteType] || productData.plastic;
+            const maxRevenue = Math.max(...products.map(p => parseRevenue(p.revenue)));
+            
+            ctx.clearRect(0, 0, 600, 350);
+            
+            const chartHeight = 250;
+            const barWidth = 80;
+            const gap = 40;
+            const startX = 50;
+            const startY = 280;
+            
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 16px Segoe UI';
+            ctx.fillText('Revenue Potential by Product (per kg)', 100, 30);
+            
+            products.forEach((product, index) => {
+                const revenue = parseRevenue(product.revenue);
+                const barHeight = (revenue / maxRevenue) * chartHeight;
+                const x = startX + index * (barWidth + gap);
+                const y = startY - barHeight;
+                
+                ctx.fillStyle = getColor(wasteType);
+                ctx.fillRect(x, y, barWidth, barHeight);
+                
+                ctx.fillStyle = '#333';
+                ctx.font = '12px Segoe UI';
+                ctx.fillText(product.name.substring(0, 8), x + 5, startY + 20);
+                
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = 'bold 12px Segoe UI';
+                ctx.fillText(product.revenue, x + 5, y - 10);
+            });
+        }
+
+        function parseRevenue(revenueStr) {
+            const match = revenueStr.match(/₹([\d,]+)/);
+            return match ? parseInt(match[1].replace(/,/g, '')) : 0;
+        }
+
+        function getColor(wasteType) {
+            const colors = {
+                plastic: '#e74c3c',
+                organic: '#27ae60',
+                industrial: '#3498db'
+            };
+            return colors[wasteType] || '#e74c3c';
+        }
+
+        function updateBusinessChart() {
+            const wasteType = document.getElementById('wasteTypeSelect').value;
+            const quantity = parseInt(document.getElementById('quantitySlider').value);
+            const canvas = document.getElementById('businessChart');
+            if (canvas) drawChart(canvas.getContext('2d'), wasteType, quantity);
+            updateProductsGrid(wasteType);
+            calculateROI();
+        }
+
+        function updateQuantityDisplay() {
+            const quantity = document.getElementById('quantitySlider').value;
+            document.getElementById('quantityDisplay').textContent = parseInt(quantity).toLocaleString() + ' kg';
+            updateBusinessChart();
+        }
+
+        function updateProductsGrid(wasteType) {
+            const productsGrid = document.getElementById('productsGrid');
+            if (!productsGrid) return;
+            
+            const products = productData[wasteType] || productData.plastic;
+            productsGrid.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-icon">${product.icon}</div>
+                    <h4>${product.name}</h4>
+                    <div class="product-stats">
+                        <span class="revenue">${product.revenue}</span>
+                        <span class="market">${product.market}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function calculateROI() {
+            const investment = parseInt(document.getElementById('investmentInput')?.value) || 200000;
+            const wasteType = document.getElementById('wasteTypeSelect')?.value || 'plastic';
+            const quantity = parseInt(document.getElementById('quantitySlider')?.value) || 1000;
+            
+            const revenuePerKg = { plastic: 35, organic: 20, industrial: 80 };
+            const revenue = quantity * (revenuePerKg[wasteType] || 35);
+            const monthlyProfit = revenue * 0.6;
+            const paybackMonths = investment / monthlyProfit;
+            const annualProfit = monthlyProfit * 12;
+            
+            const roiResult = document.getElementById('roiResult');
+            if (roiResult) {
+                roiResult.innerHTML = `
+                    <div class="roi-item"><span class="roi-label">Monthly Revenue</span><span class="roi-value">₹${revenue.toLocaleString()}</span></div>
+                    <div class="roi-item"><span class="roi-label">Payback Period</span><span class="roi-value">${paybackMonths.toFixed(1)} months</span></div>
+                    <div class="roi-item"><span class="roi-label">Annual Profit</span><span class="roi-value">₹${annualProfit.toLocaleString()}</span></div>
+                `;
+            }
+        }
+
+        // Admin Functions
+        async function uploadSatelliteImage() {
+            const fileInput = document.getElementById('satelliteInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select an image first');
+                return;
+            }
+            
+            displayAnalysisResult({
+                cleanliness_score: 72,
+                risk_level: 'Medium',
+                waste_type_detected: 'Mixed Waste'
+            });
+        }
+
+        function displayAnalysisResult(result) {
+            const resultDiv = document.getElementById('analysisResult');
+            resultDiv.style.display = 'block';
+            document.getElementById('cleanlinessScore').textContent = result.cleanliness_score;
+            document.getElementById('riskLevel').textContent = result.risk_level;
+            document.getElementById('wasteType').textContent = result.waste_type_detected;
+        }
+
+        function assignTask() {
+            alert('Task assignment dialog would open here.');
+        }
+
+        // Employee Functions
+        function openTaskDetail(taskId) {
+            alert(`Task details for ${taskId} would be shown here.`);
+        }
+
+        function markComplete(taskId) {
+            if (confirm(`Mark task ${taskId} as complete?`)) {
+                const taskCard = document.querySelector(`[onclick*="${taskId}"]`).closest('.task-card');
+                if (taskCard) taskCard.style.opacity = '0.5';
+                showNotification(`Task ${taskId} marked as complete!`, 'success');
+            }
+        }
+
+        function requestAdditionalMembers() {
+            const reason = prompt('Please provide reason for requesting additional members:');
+            if (reason) showNotification('Request sent to admin!', 'success');
+        }
+
+        async function submitPhotos() {
+            const beforePhoto = document.getElementById('beforePhoto').files[0];
+            const afterPhoto = document.getElementById('afterPhoto').files[0];
+            
+            if (!beforePhoto || !afterPhoto) {
+                alert('Please upload both before and after photos');
+                return;
+            }
+            
+            showNotification('Photos submitted successfully!', 'success');
+            document.getElementById('beforePhoto').value = '';
+            document.getElementById('afterPhoto').value = '';
+            document.getElementById('beforePhotoArea').innerHTML = '<span class="photo-icon">📷</span><p>Click to upload</p>';
+            document.getElementById('afterPhotoArea').innerHTML = '<span class="photo-icon">📷</span><p>Click to upload</p>';
+        }
+
+        function triggerEmergency() {
+            if (confirm('⚠️ This will send an emergency alert to the admin. Continue?')) {
+                const reason = prompt('Please describe the emergency:');
+                if (reason) showNotification('Emergency alert sent!', 'warning');
+            }
+        }
+
+        // Corporate Functions
+        function requestProcurement(wasteType, availableQty) {
+            const quantity = prompt(`Available: ${availableQty} kg\n\nEnter quantity to request:`);
+            if (quantity && parseInt(quantity) > 0) {
+                if (parseInt(quantity) > availableQty) {
+                    alert('Requested quantity exceeds available amount');
+                    return;
+                }
+                showNotification(`Procurement request submitted for ${quantity}kg!`, 'success');
+            }
+        }
+
+        function contactAdmin(wasteType) {
+            const message = prompt(`Enter your message regarding ${wasteType} waste:`);
+            if (message) showNotification('Message sent to admin!', 'success');
+        }
+
+        // Public Functions
+        function resetForm() {
+            document.getElementById('complaintForm').reset();
+            document.getElementById('complaintForm').style.display = 'flex';
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('imageUploadArea').innerHTML = '<span class="upload-icon">📷</span><p>Click to upload photo</p>';
+        }
+
+        // Notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed; top: 100px; right: 20px; padding: 1rem 2rem;
+                border-radius: 8px; color: white; font-weight: 600; z-index: 10000;
+                animation: slideIn 0.3s ease; background: ${type === 'success' ? '#2ecc71' : type === 'warning' ? '#f39c12' : '#3498db'};
+            `;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        // Three.js Visualization
+        let scene, camera, renderer, controls, buildings = [], particles;
+
+        function initThreeJS() {
+            const container = document.getElementById('cityVisualization');
+            if (!container) return;
+            
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(50, 30, 50);
+            
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight - 80);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setClearColor(0x000000, 0);
+            container.appendChild(renderer.domElement);
+            
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.5;
+            
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(50, 50, 50);
+            scene.add(directionalLight);
+            
+            createGround();
+            createBuildings();
+            createParticles();
+            createGrid();
+            
+            animate();
+            
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function createGround() {
+            const groundGeometry = new THREE.PlaneGeometry(200, 200);
+            const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x1a1a2e, roughness: 0.8 });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.position.y = -0.5;
+            scene.add(ground);
+        }
+
+        function createBuildings() {
+            const buildingColors = [0x2ecc71, 0x3498db, 0x9b59b6, 0xf39c12, 0xe74c3c];
+            
+            for (let x = -40; x <= 40; x += 15) {
+                for (let z = -40; z <= 40; z += 15) {
+                    if (Math.random() > 0.3) {
+                        const height = 3 + Math.random() * 15;
+                        const width = 4 + Math.random() * 6;
+                        
+                        const geometry = new THREE.BoxGeometry(width, height, width);
+                        const material = new THREE.MeshStandardMaterial({
+                            color: buildingColors[Math.floor(Math.random() * buildingColors.length)],
+                            roughness: 0.3,
+                            metalness: 0.7,
+                            transparent: true,
+                            opacity: 0.8
+                        });
+                        
+                        const building = new THREE.Mesh(geometry, material);
+                        building.position.set(x + (Math.random() - 0.5) * 5, height / 2, z + (Math.random() - 0.5) * 5);
+                        
+                        const edges = new THREE.EdgesGeometry(geometry);
+                        const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 0.3 });
+                        const wireframe = new THREE.LineSegments(edges, lineMaterial);
+                        building.add(wireframe);
+                        
+                        scene.add(building);
+                        buildings.push(building);
+                    }
+                }
+            }
+        }
+
+        function createParticles() {
+            const particleCount = 500;
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3] = (Math.random() - 0.5) * 100;
+                positions[i * 3 + 1] = Math.random() * 50;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
+            }
+            
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            
+            const material = new THREE.PointsMaterial({ size: 0.5, color: 0x2ecc71, transparent: true, opacity: 0.6 });
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+        }
+
+        function createGrid() {
+            const gridHelper = new THREE.GridHelper(200, 40, 0x2ecc71, 0x1a3a2a);
+            gridHelper.position.y = 0;
+            scene.add(gridHelper);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const time = Date.now() * 0.001;
+            
+            buildings.forEach((building, index) => {
+                building.position.y += Math.sin(time + index) * 0.002;
+            });
+            
+            if (particles) {
+                particles.rotation.y += 0.001;
+            }
+            
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight - 80);
+        }
+
+        // API Calls
+        async function predictWaste(imageUrl) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/predict-waste`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image_url: imageUrl })
+                });
+                return await response.json();
+            } catch (error) {
+                return { error: 'Failed to predict waste' };
+            }
+        }
+
+        // Initialize on load
+        window.addEventListener('load', initializePage);
+        window.addEventListener('hashchange', () => initializePage());
+
+        // Expose functions globally
+        window.logout = logout;
+        window.fillDemo = fillDemo;
+        window.fetchAndDisplayUsers = fetchAndDisplayUsers;
+        window.uploadSatelliteImage = uploadSatelliteImage;
+        window.assignTask = assignTask;
+        window.openTaskDetail = openTaskDetail;
+        window.markComplete = markComplete;
+        window.requestAdditionalMembers = requestAdditionalMembers;
+        window.submitPhotos = submitPhotos;
+        window.triggerEmergency = triggerEmergency;
+        window.requestProcurement = requestProcurement;
+        window.contactAdmin = contactAdmin;
+        window.resetForm = resetForm;
+        window.updateBusinessChart = updateBusinessChart;
+        window.updateQuantityDisplay = updateQuantityDisplay;
+        window.calculateROI = calculateROI;
+    </script>
+</body>
+</html>
