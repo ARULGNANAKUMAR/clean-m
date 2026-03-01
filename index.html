@@ -6,7 +6,7 @@
     <title>EcoSentinel – Madurai | Environmental Intelligence System</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
     <style>
-        /* Consolidated CSS - All styles merged from style.css, dashboard.css, login.css, public.css, chart.css, additional.css */
+        /* Consolidated CSS - All styles merged */
         :root {
             --primary-color: #2ecc71;
             --secondary-color: #27ae60;
@@ -20,6 +20,16 @@
             --card-bg: #ffffff;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
+            
+            /* Chatbot colors */
+            --chatbot-primary: #2ecc71;
+            --chatbot-secondary: #27ae60;
+            --chatbot-bg: #ffffff;
+            --chatbot-user-bg: #e8f5e9;
+            --chatbot-bot-bg: #f1f8ff;
+            --chatbot-border: #e0e0e0;
+            --chatbot-text: #333;
+            --chatbot-time: #999;
         }
 
         * {
@@ -33,6 +43,11 @@
             line-height: 1.6;
             color: var(--text-color);
             background-color: var(--bg-color);
+            transition: opacity 0.5s ease;
+        }
+
+        body.loading {
+            overflow: hidden;
         }
 
         a {
@@ -42,6 +57,148 @@
 
         ul {
             list-style: none;
+        }
+
+        /* Page Loader */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .page-loader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Butterfly Loader - From Uiverse.io by WerlynRodriguez */
+        .loader {
+            --sizeLoader: 120px;
+            --sizeLoaderHalf: calc(var(--sizeLoader) / 2);
+            --stepBtf: calc(var(--sizeLoader) / 10);
+            display: flex;
+            position: relative;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            width: var(--sizeLoader);
+            height: var(--sizeLoader);
+            transform: scale(1.5);
+        }
+
+        .loader:hover {
+            cursor: progress;
+        }
+
+        .loader[anim1] {
+            animation: anim1 0.3s alternate ease-in-out infinite;
+        }
+
+        .loader:not([anim1]) {
+            right: var(--sizeLoaderHalf);
+            transform-origin: center right;
+            animation: moveAround 2s linear infinite;
+        }
+
+        .loader[showShadow] {
+            filter: drop-shadow(0 10px 10px rgba(46, 204, 113, 0.3));
+        }
+
+        .loader svg:nth-child(1) {
+            position: relative;
+            height: 100%;
+            left: 2%;
+            transform-origin: center right;
+            animation: wing 0.5s ease-in-out infinite;
+        }
+
+        .loader svg:nth-child(2) {
+            height: 50%;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .loader svg:nth-child(3) {
+            position: relative;
+            height: 100%;
+            left: -2%;
+            transform-origin: center left;
+            animation: wing 0.5s ease-in-out infinite;
+        }
+
+        .loader svg path {
+            fill: var(--primary-color);
+        }
+
+        @keyframes wing {
+            0% {
+                transform: rotateY(0deg);
+            }
+            50% {
+                transform: rotateY(60deg);
+            }
+            100% {
+                transform: rotateY(0deg);
+            }
+        }
+
+        @keyframes moveAround {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes anim1 {
+            from {
+                transform: translateY(0px);
+            }
+            to {
+                transform: translateY(var(--stepBtf));
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Loading text */
+        .loading-text {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            animation: glow 1.5s ease-in-out infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                opacity: 0.5;
+                text-shadow: 0 0 5px rgba(46, 204, 113, 0.3);
+            }
+            50% {
+                opacity: 1;
+                text-shadow: 0 0 20px rgba(46, 204, 113, 0.8);
+            }
         }
 
         /* Navigation */
@@ -740,6 +897,7 @@
             text-align: center;
             z-index: 10;
             padding: 2rem;
+            max-width: 800px;
         }
 
         .hero h1 {
@@ -1001,6 +1159,328 @@
             margin-bottom: 1rem;
         }
 
+        /* ========== CHATBOT STYLES ========== */
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .chatbot-button {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--chatbot-primary), var(--chatbot-secondary));
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 20px rgba(46, 204, 113, 0.4);
+            transition: var(--transition);
+            animation: pulse 2s infinite;
+        }
+
+        .chatbot-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(46, 204, 113, 0.6);
+        }
+
+        .chatbot-button.active {
+            transform: scale(0.9);
+            background: var(--danger-color);
+        }
+
+        .chatbot-panel {
+            position: absolute;
+            bottom: 90px;
+            right: 0;
+            width: 380px;
+            height: 550px;
+            background: var(--chatbot-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--chatbot-border);
+            animation: slideIn 0.3s ease;
+        }
+
+        .chatbot-panel.open {
+            display: flex;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, var(--chatbot-primary), var(--chatbot-secondary));
+            color: white;
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h3 {
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chatbot-header button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .chatbot-header button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 1.2rem;
+            overflow-y: auto;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            max-width: 85%;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--chatbot-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: var(--accent-color);
+        }
+
+        .message-content {
+            background: var(--chatbot-bot-bg);
+            padding: 0.8rem 1rem;
+            border-radius: 18px;
+            border-bottom-left-radius: 5px;
+            position: relative;
+        }
+
+        .message.user .message-content {
+            background: var(--chatbot-user-bg);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-content p {
+            color: var(--chatbot-text);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 0.3rem;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: var(--chatbot-time);
+            display: block;
+            text-align: right;
+        }
+
+        .chatbot-typing {
+            display: flex;
+            gap: 0.3rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 18px;
+            border-bottom-left-radius: 5px;
+            width: fit-content;
+        }
+
+        .chatbot-typing span {
+            width: 8px;
+            height: 8px;
+            background: var(--chatbot-primary);
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .chatbot-typing span:nth-child(2) { animation-delay: 0.2s; }
+        .chatbot-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+        .chatbot-input {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid var(--chatbot-border);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--chatbot-border);
+            border-radius: 25px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .chatbot-input input:focus {
+            outline: none;
+            border-color: var(--chatbot-primary);
+        }
+
+        .chatbot-input button {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--chatbot-primary), var(--chatbot-secondary));
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .chatbot-input button:hover {
+            transform: scale(1.1);
+        }
+
+        .chatbot-input button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .suggested-questions {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-top: 1px solid var(--chatbot-border);
+        }
+
+        .suggested-questions p {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .question-chip {
+            padding: 0.4rem 1rem;
+            background: white;
+            border: 1px solid var(--chatbot-primary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--chatbot-primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .question-chip:hover {
+            background: var(--chatbot-primary);
+            color: white;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        /* Responsive for chatbot */
+        @media (max-width: 480px) {
+            .chatbot-panel {
+                width: 320px;
+                height: 500px;
+                right: 0;
+                bottom: 80px;
+            }
+            
+            .chatbot-button {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Quick Info Cards in Chat */
+        .info-card {
+            background: white;
+            border-radius: 10px;
+            padding: 0.8rem;
+            margin-top: 0.5rem;
+            border-left: 3px solid var(--chatbot-primary);
+        }
+
+        .info-card h4 {
+            color: var(--dark-color);
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .info-card p {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.2rem;
+        }
+
+        .info-card .value {
+            font-weight: bold;
+            color: var(--chatbot-primary);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
@@ -1009,11 +1489,30 @@
             .login-container { flex-direction: column; }
             .photo-upload-grid { grid-template-columns: 1fr; }
             .pollution-types { grid-template-columns: 1fr; }
+            .loader { transform: scale(1); }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation will be dynamically loaded based on page -->
+    <!-- Page Loader with Butterfly -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader" anim1 showShadow>
+            <svg viewBox="0 0 18.528 35.424" version="1.1" y="0" x="0" height="369" width="193" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3.358 35.05c.435-.175.646-.408.861-.95.374-.94.698-1.52 1.145-2.05.78-.92 1.757-1.638 2.666-1.957.603-.212.9-.204 1.505.041.843.343 1.597.25 2.062-.254.95-1.029 3.95-6.873 5.841-11.376.869-2.07.831-1.882.797-3.962-.034-2.106-.024-2.064-.927-3.887-1.639-3.31-4.426-6.582-7.147-8.392C8.71 1.298 6.715.504 5.296.328c-.718-.09-2.465-.001-3.183.16C.943.752.279 1.268.279 1.917c0 .119.437 1.136.97 2.26.533 1.126 1.044 2.291 1.135 2.591.334 1.106.776 3.567.945 5.27.065.652.357 1.286.751 1.633.419.367 1.351.786 1.964.883.286.044.534.096.553.115.018.018-.129.128-.327.244-.761.446-1.432 1.439-1.74 2.574-.216.802-.194 2.914.045 4.121.24 1.212.575 2.318 1.031 3.403.46 1.092.535 1.458.439 2.135-.223 1.575-1.958 4.03-3.489 4.937-.693.41-.885.587-1.066.98-.173.375-.185.535-.069.953.223.802 1.206 1.326 1.937 1.033z" fill="#2ecc71"></path>
+            </svg>
+
+            <svg viewBox="0 0 2.4 14.4" version="1.1" y="0" x="0" height="150" width="25" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.2 13c0 .641-.447 1.16-1 1.16-.553 0-1-.519-1-1.16V1.4C.2.759.647.24 1.2.24c.553 0 1 .519 1 1.16z" fill="#2ecc71"></path>
+            </svg>
+
+            <svg viewBox="0 0 18.528 35.424" version="1.1" y="0" x="0" height="369" width="193" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.105 35.155c-.42-.196-.627-.482-.902-1.253-.544-1.517-2.145-3.126-3.636-3.652-.69-.243-.887-.242-1.486.01-.617.26-1.342.278-1.798.045-.555-.283-1.76-2.262-3.476-5.708C2.628 22.232.984 18.575.455 17.144c-.236-.637-.237-.655-.237-2.485 0-2.164.01-2.209.9-4.013 1.011-2.049 2.53-4.189 4.185-5.9C7.679 2.293 9.783.995 12.49.313c.782-.197 1.554-.236 2.695-.137 1.619.14 2.38.38 2.882.909.21.22.246.321.243.684-.002.373-.122.67-.959 2.395-1.277 2.63-1.59 3.806-2.035 7.63-.111.951-.316 1.426-.809 1.87-.52.47-1.306.807-2.165.928l-.391.054.35.224c.897.574 1.58 1.674 1.834 2.956.193.969.12 2.791-.164 4.15-.222 1.061-.696 2.518-1.12 3.443-.336.735-.411 1.584-.203 2.3.505 1.738 2.056 3.692 3.736 4.705.693.417.938.83.874 1.476-.104 1.071-1.193 1.706-2.153 1.256z" fill="#2ecc71"></path>
+            </svg>
+        </div>
+        <div class="loading-text">EcoSentinel – Madurai</div>
+    </div>
+
+    <!-- Navigation -->
     <nav class="navbar">
         <div class="logo">
             <span class="logo-icon">🌍</span>
@@ -1026,12 +1525,56 @@
             <li><a href="#contact">Contact</a></li>
         </ul>
         <div class="nav-auth" id="navAuth">
-            <button class="btn-login" onclick="window.location.href='#login'">Login</button>
+            <button class="btn-login" onclick="window.location.hash='#login'">Login</button>
         </div>
     </nav>
 
-    <!-- Main Content Container - Will be loaded dynamically -->
+    <!-- Main Content Container -->
     <div id="app"></div>
+
+    <!-- Chatbot Component -->
+    <div class="chatbot-container" id="chatbotContainer">
+        <button class="chatbot-button" id="chatbotButton" onclick="toggleChatbot()">
+            🤖
+        </button>
+        
+        <div class="chatbot-panel" id="chatbotPanel">
+            <div class="chatbot-header">
+                <h3>
+                    <span>🌿</span>
+                    Eco Assistant - Madurai
+                </h3>
+                <button onclick="toggleChatbot()">✕</button>
+            </div>
+            
+            <div class="chatbot-messages" id="chatbotMessages">
+                <!-- Welcome message -->
+                <div class="message bot">
+                    <div class="message-avatar">🌍</div>
+                    <div class="message-content">
+                        <p>Hello! I'm your environmental assistant for Madurai. How can I help you today?</p>
+                        <span class="message-time">Just now</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="suggested-questions">
+                <p>Suggested questions:</p>
+                <div class="question-chips">
+                    <span class="question-chip" onclick="sendQuickQuestion('air quality')">🌬️ Air quality</span>
+                    <span class="question-chip" onclick="sendQuickQuestion('waste')">🗑️ Waste status</span>
+                    <span class="question-chip" onclick="sendQuickQuestion('high risk wards')">⚠️ High risk wards</span>
+                    <span class="question-chip" onclick="sendQuickQuestion('employees')">👷 Active employees</span>
+                    <span class="question-chip" onclick="sendQuickQuestion('complaints')">📋 Recent complaints</span>
+                </div>
+            </div>
+            
+            <div class="chatbot-input">
+                <input type="text" id="chatbotInput" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
+                <button id="chatbotSendBtn" onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer>
@@ -1068,7 +1611,7 @@
         </div>
     </footer>
 
-    <!-- Consolidated JavaScript -->
+    <!-- Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
@@ -1077,7 +1620,19 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     
     <script>
-        // Consolidated JavaScript - All JS merged from main.js, login.js, admin.js, employee.js, corporate.js, public.js, chart.js, three-visualization.js
+        // Consolidated JavaScript with Enhanced Chatbot and Loader
+        // ========================================================
+        
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('pageLoader').classList.add('fade-out');
+                document.body.classList.remove('loading');
+            }, 2000); // Show loader for 2 seconds
+        });
+
+        // Add loading class to body initially
+        document.body.classList.add('loading');
         
         // Firebase Configuration
         const firebaseConfig = {
@@ -1114,6 +1669,54 @@
             ]
         };
 
+        // Chatbot Knowledge Base
+        const chatbotKnowledge = {
+            "air quality": {
+                response: "Current Air Quality Index (AQI) in Madurai is 102 (Moderate). High risk wards: Ward 3 (125), Ward 6 (142), Ward 10 (158). Best air quality: Ward 5 (68).",
+                data: { aqi: 102, status: "Moderate", high_risk: ["Ward 3", "Ward 6", "Ward 10"] }
+            },
+            "waste": {
+                response: "Total waste generated: 450 tons/day. Collected: 405 tons (90% efficiency). Plastic: 2,450 kg, Organic: 5,120 kg, Industrial: 1,890 kg available.",
+                data: { total: 450, collected: 405, efficiency: 90 }
+            },
+            "high risk wards": {
+                response: "⚠️ High Risk Wards: Ward 3 (Anna Nagar), Ward 6 (Tallakulam), Ward 10 (Goripalayam). These areas have poor air quality, blocked drainage, and high waste density.",
+                data: { wards: ["Ward 3", "Ward 6", "Ward 10"] }
+            },
+            "employees": {
+                response: "Active employees: 98 out of 124 total. Currently online: 8 employees. Busiest wards: Ward 3, Ward 6, Ward 10 with highest task assignments.",
+                data: { active: 98, total: 124, online: 8 }
+            },
+            "complaints": {
+                response: "Recent complaints: 6 total. Pending: 3, Processing: 2, Resolved: 1. Most common type: Land waste and Air pollution.",
+                data: { total: 6, pending: 3, processing: 2, resolved: 1 }
+            },
+            "drainage": {
+                response: "Drainage status: 85 km total network, 12.5 km blocked. Critical wards: Ward 3, Ward 6, Ward 10 with blockage risk >85%.",
+                data: { total_km: 85, blocked_km: 12.5 }
+            },
+            "water": {
+                response: "Water quality: Ward 5 (Excellent), Wards 1,2,7,9 (Good), Wards 3,4,8 (Moderate), Wards 6,10 (Poor).",
+                data: { excellent: ["Ward 5"], good: ["Ward 1","Ward 2","Ward 7","Ward 9"], poor: ["Ward 6","Ward 10"] }
+            },
+            "startup": {
+                response: "Top startup opportunities: 1. Plastic Recycling (₹2-5L investment), 2. Organic Compost (₹3-8L), 3. E-Waste Recycling (₹10-25L). Contact admin for more details.",
+                data: { opportunities: ["Plastic Recycling", "Organic Compost", "E-Waste Recycling"] }
+            },
+            "emergency": {
+                response: "🚨 For emergencies, please use the emergency button in the employee dashboard or contact: 1077 (Disaster Management) or 100 (Police).",
+                data: { helpline: "1077" }
+            },
+            "help": {
+                response: "I can help you with: Air quality, Waste statistics, High risk wards, Employee status, Complaints, Drainage, Water quality, Startup opportunities, and Emergency contacts. Just ask!",
+                data: { capabilities: ["air quality","waste","high risk wards","employees","complaints","drainage","water","startup","emergency"] }
+            },
+            "default": {
+                response: "I'm not sure about that. Try asking about: air quality, waste, high risk wards, employees, complaints, drainage, water quality, startup opportunities, or emergency contacts.",
+                data: {}
+            }
+        };
+
         // DOM Content Loaded
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize Firebase if available
@@ -1126,7 +1729,189 @@
             
             // Initialize components based on current page
             initializePage();
+            
+            // Initialize chatbot event listeners
+            initChatbot();
         });
+
+        // Initialize chatbot
+        function initChatbot() {
+            const input = document.getElementById('chatbotInput');
+            if (input) {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+            }
+        }
+
+        // Toggle chatbot panel
+        function toggleChatbot() {
+            const panel = document.getElementById('chatbotPanel');
+            const button = document.getElementById('chatbotButton');
+            
+            panel.classList.toggle('open');
+            button.classList.toggle('active');
+            
+            if (panel.classList.contains('open')) {
+                document.getElementById('chatbotInput').focus();
+            }
+        }
+
+        // Handle key press
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Send message
+        async function sendMessage() {
+            const input = document.getElementById('chatbotInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Clear input
+            input.value = '';
+            
+            // Add user message to chat
+            addMessage(message, 'user');
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Get bot response
+            setTimeout(async () => {
+                removeTypingIndicator();
+                const response = await getBotResponse(message);
+                addMessage(response, 'bot');
+            }, 1000);
+        }
+
+        // Send quick question from chips
+        function sendQuickQuestion(question) {
+            document.getElementById('chatbotInput').value = question;
+            sendMessage();
+        }
+
+        // Add message to chat
+        function addMessage(text, sender) {
+            const messagesDiv = document.getElementById('chatbotMessages');
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const avatar = sender === 'user' ? '👤' : '🌍';
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${avatar}</div>
+                <div class="message-content">
+                    <p>${text}</p>
+                    <span class="message-time">${time}</span>
+                </div>
+            `;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            const messagesDiv = document.getElementById('chatbotMessages');
+            
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="message-avatar">🌍</div>
+                <div class="chatbot-typing">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            `;
+            
+            messagesDiv.appendChild(typingDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Remove typing indicator
+        function removeTypingIndicator() {
+            const typingDiv = document.getElementById('typingIndicator');
+            if (typingDiv) {
+                typingDiv.remove();
+            }
+        }
+
+        // Get bot response based on user input
+        async function getBotResponse(userInput) {
+            const input = userInput.toLowerCase();
+            
+            // Check for keywords in user input
+            for (const [key, value] of Object.entries(chatbotKnowledge)) {
+                if (input.includes(key)) {
+                    // If it's a data query, try to fetch real data
+                    if (key === 'air quality' || key === 'waste' || key === 'employees') {
+                        try {
+                            const realData = await fetchRealtimeData(key);
+                            if (realData) return realData;
+                        } catch (e) {
+                            console.log('Using cached data');
+                        }
+                    }
+                    return value.response;
+                }
+            }
+            
+            // Check for specific questions
+            if (input.includes('how') && input.includes('ward')) {
+                return "You can view ward-wise data in the Ward Map section below. Click on any ward to see detailed information about air quality, waste density, and risk level.";
+            }
+            else if (input.includes('recycle') || input.includes('recycling')) {
+                return "♻️ Recycling opportunities: We have 2,450 kg plastic, 5,120 kg organic waste available. Check the 'Waste-to-Product AI Analysis' section for business opportunities!";
+            }
+            else if (input.includes('report') || input.includes('complaint')) {
+                return "To report an environmental issue, please login as a Public User or use the 'Report Issue' button on the home page. Your complaint will be tracked with a unique ID.";
+            }
+            else if (input.includes('thank')) {
+                return "You're welcome! 😊 Feel free to ask if you need any more information about Madurai's environment.";
+            }
+            else if (input.includes('hi') || input.includes('hello') || input.includes('hey')) {
+                return "Hello! 👋 How can I assist you with Madurai's environmental data today?";
+            }
+            
+            // Default response
+            return chatbotKnowledge.default.response;
+        }
+
+        // Fetch realtime data from API
+        async function fetchRealtimeData(query) {
+            try {
+                if (query === 'air quality') {
+                    const response = await fetch(`${API_BASE_URL}/city-stats`);
+                    const data = await response.json();
+                    return `📊 Real-time Air Quality: AQI is ${data.avg_air_quality}. High risk wards have AQI > 100. Overall city health: ${data.collection_efficiency}% waste collection efficiency.`;
+                }
+                else if (query === 'waste') {
+                    const response = await fetch(`${API_BASE_URL}/waste-inventory`);
+                    const data = await response.json();
+                    return `🗑️ Current Waste Inventory: Plastic: ${data.plastic.total_kg}kg, Organic: ${data.organic.total_kg}kg, Industrial: ${data.industrial.total_kg}kg, Hazardous: ${data.hazardous.total_kg}kg.`;
+                }
+                else if (query === 'employees') {
+                    const response = await fetch(`${API_BASE_URL}/employees`);
+                    const data = await response.json();
+                    const online = data.filter(e => e.status === 'online').length;
+                    return `👷 Employee Status: Total ${data.length} employees, ${online} currently online. Busiest in high-risk wards.`;
+                }
+                return null;
+            } catch (error) {
+                console.log('API fetch failed, using cached data');
+                return null;
+            }
+        }
 
         // Initialize page based on URL hash
         function initializePage() {
@@ -2486,6 +3271,12 @@
         window.updateBusinessChart = updateBusinessChart;
         window.updateQuantityDisplay = updateQuantityDisplay;
         window.calculateROI = calculateROI;
+        
+        // Chatbot functions
+        window.toggleChatbot = toggleChatbot;
+        window.sendMessage = sendMessage;
+        window.sendQuickQuestion = sendQuickQuestion;
+        window.handleKeyPress = handleKeyPress;
     </script>
 </body>
 </html>
